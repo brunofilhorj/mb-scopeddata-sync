@@ -1,0 +1,2 @@
+Uso interno Monte Bravo Investimentos. Todos os direitos reservados.
+Este pacote é distribuído apenas pelo feed NuGet interno da MB.

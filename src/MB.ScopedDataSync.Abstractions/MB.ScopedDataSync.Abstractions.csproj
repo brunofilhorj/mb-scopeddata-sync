@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Contratos de leitura, atualização controlada, staleness, falha contida e envelope de eventos do MB.ScopedDataSync.</Description>
+  </PropertyGroup>
+</Project>

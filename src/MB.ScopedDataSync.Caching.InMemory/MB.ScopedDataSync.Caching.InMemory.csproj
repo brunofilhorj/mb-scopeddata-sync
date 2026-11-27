@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Cache em memória (IMemoryCache) com watermark de Version e TTL de payload para MB.ScopedDataSync.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MB.ScopedDataSync.Abstractions\MB.ScopedDataSync.Abstractions.csproj" />
+    <ProjectReference Include="..\MB.ScopedDataSync.Consumer\MB.ScopedDataSync.Consumer.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MB.ScopedDataSync.Caching.InMemory\MB.ScopedDataSync.Caching.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\MB.ScopedDataSync.Consumer\MB.ScopedDataSync.Consumer.csproj" />
+    <ProjectReference Include="..\..\src\MB.ScopedDataSync.Observability\MB.ScopedDataSync.Observability.csproj" />
+  </ItemGroup>
+</Project>

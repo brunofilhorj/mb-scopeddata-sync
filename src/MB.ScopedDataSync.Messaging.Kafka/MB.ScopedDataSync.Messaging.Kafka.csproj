@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Kafka opcional: consumidor com um tópico por escopo e cliente produtor da outbox, com acks=all.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MB.ScopedDataSync.Abstractions\MB.ScopedDataSync.Abstractions.csproj" />
+    <ProjectReference Include="..\MB.ScopedDataSync.Consumer\MB.ScopedDataSync.Consumer.csproj" />
+    <ProjectReference Include="..\MB.ScopedDataSync.Producer\MB.ScopedDataSync.Producer.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="MB.ScopedDataSync.Tests" />
+  </ItemGroup>
+</Project>

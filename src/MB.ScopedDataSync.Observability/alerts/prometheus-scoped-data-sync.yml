@@ -1,0 +1,85 @@
+# Regras para o Meter MB.ScopedDataSync depois da tradução padrão do
+# exporter Prometheus (UnderscoreEscapingWithSuffixes).
+# Um backend que guarda o nome OTLP usa ponto e não recebe _total nem _milliseconds.
+# Estas regras só leem séries. Não alteram apply, descarte, versão nem cooldown.
+groups:
+  - name: mb.scoped_data_sync
+    rules:
+      - alert: ScopedDataSyncFailures
+        expr: sum by (scope) (rate(mb_scoped_data_sync_sync_failures_total[5m])) > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: Falha de sync no escopo {{ $labels.scope }}
+          description: RecordSyncFailureAsync incrementou mb.scoped_data_sync.sync.failures por 10 minutos. A versão e o payload aceito não mudam com essa falha.
+
+      - alert: ScopedDataSyncStaleAlerts
+        expr: sum by (scope) (rate(mb_scoped_data_sync_staleness_alerts_total[5m])) > 0
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Alerta de staleness no escopo {{ $labels.scope }}
+          description: O cooldown por scope:entityId já filtrou repetição. A taxa restante significa projeção que segue além de StaleAfter.
+
+      - alert: ScopedDataSyncProjectionAgeHigh
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le, scope) (
+              rate(mb_scoped_data_sync_projection_age_milliseconds_bucket{status="Stale"}[5m])
+            )
+          ) > 300000
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Idade p95 das leituras Stale acima de 5 minutos no escopo {{ $labels.scope }}
+          description: O limiar está em milissegundos e parte de um StaleAfter de 2 minutos. Ajuste ao StaleAfter do serviço. Só entra leitura com status Stale. Missing não entra no histograma.
+
+      - alert: ScopedDataSyncStaleReadShare
+        expr: |
+          (
+            sum by (scope) (rate(mb_scoped_data_sync_projection_age_milliseconds_count{status="Stale"}[5m]))
+            /
+            clamp_min(
+              sum by (scope) (rate(mb_scoped_data_sync_projection_age_milliseconds_count[5m])),
+              1e-9
+            )
+          ) > 0.5
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: Mais da metade das leituras com payload está Stale no escopo {{ $labels.scope }}
+          description: A proporção usa o _count do histograma de idade. Leitura Missing não entra. O limiar 0.5 é exemplo. Ajuste ao que Operações tolera acima do StaleAfter.
+
+      - alert: ScopedDataSyncDiscardsDominate
+        expr: |
+          (
+            sum by (scope) (rate(mb_scoped_data_sync_events_discarded_total[15m]))
+            /
+            clamp_min(
+              sum by (scope) (rate(mb_scoped_data_sync_events_applied_total[15m]))
+              + sum by (scope) (rate(mb_scoped_data_sync_events_discarded_total[15m])),
+              1e-9
+            )
+          ) > 0.95
+          and sum by (scope) (rate(mb_scoped_data_sync_events_applied_total[15m])) < 0.01
+          and sum by (scope) (rate(mb_scoped_data_sync_events_discarded_total[15m])) > 0
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: Descarte domina e o apply quase parou no escopo {{ $labels.scope }}
+          description: Replay do tópico compactado aumenta discarded sem perder dado. Este alerta espera 30 minutos com apply abaixo de 0.01/s e descarte acima de 95% do tráfego de versão.
+
+      - alert: ScopedDataSyncSignalMissing
+        expr: absent(mb_scoped_data_sync_events_applied_total)
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: O Meter MB.ScopedDataSync sumiu do scrape
+          description: Não há série de eventos aplicados. Em Prometheus compartilhado, troque por absent(mb_scoped_data_sync_events_applied_total{job="nome-do-servico"}) para não disparar quando outro job está saudável.

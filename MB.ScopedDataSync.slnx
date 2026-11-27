@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MB.ScopedDataSync.Abstractions/MB.ScopedDataSync.Abstractions.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Consumer/MB.ScopedDataSync.Consumer.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Caching.InMemory/MB.ScopedDataSync.Caching.InMemory.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Caching.Redis/MB.ScopedDataSync.Caching.Redis.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Storage.Postgres/MB.ScopedDataSync.Storage.Postgres.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Observability/MB.ScopedDataSync.Observability.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Producer/MB.ScopedDataSync.Producer.csproj" />
+    <Project Path="src/MB.ScopedDataSync.Messaging.Kafka/MB.ScopedDataSync.Messaging.Kafka.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MB.ScopedDataSync.Tests/MB.ScopedDataSync.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/MB.ScopedDataSync.InMemoryExample/MB.ScopedDataSync.InMemoryExample.csproj" />
+    <Project Path="samples/MB.ScopedDataSync.ObservabilityLocal/MB.ScopedDataSync.ObservabilityLocal.csproj" />
+  </Folder>
+  <Folder Name="/integration/">
+    <Project Path="integration/MB.ScopedDataSync.Containers/MB.ScopedDataSync.Containers.csproj" />
+  </Folder>
+</Solution>
